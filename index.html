@@ -421,22 +421,6 @@
 
   /* ---------- CTA ---------- */
   .cta{ padding:130px 0; position:relative; overflow:hidden; }
-  .cta-bloom{
-    position:absolute; left:50%; top:50%;
-    transform:translate(-50%,-50%);
-    width:min(95vw, 860px); aspect-ratio:1/1;
-    background-image:url("assets/bloom-bro.png");
-    background-size:cover; background-position:center;
-    mix-blend-mode:screen; opacity:0.55;
-    -webkit-mask-image:radial-gradient(circle at 50% 50%, #000 32%, transparent 70%);
-            mask-image:radial-gradient(circle at 50% 50%, #000 32%, transparent 70%);
-    animation:bloomDrift 16s ease-in-out infinite;
-    pointer-events:none;
-  }
-  @keyframes bloomDrift{
-    0%,100%{ transform:translate(-50%,-50%) scale(1) rotate(0deg); }
-    50%{ transform:translate(-50%,-50%) scale(1.06) rotate(3deg); }
-  }
   .cta-card{
     position:relative; z-index:2;
     max-width:760px; margin:0 auto;
@@ -730,7 +714,6 @@
 
 <!-- CTA -->
 <section class="cta" id="contato">
-  <div class="cta-bloom" aria-hidden="true"></div>
   <div class="container">
     <div class="cta-card glass">
       <div class="cta-logo"><img src="assets/logo-quadrado.png" alt="BRO Growth"></div>
