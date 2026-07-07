@@ -1,0 +1,792 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BRO Growth — Engenharia de Crescimento</title>
+<meta name="description" content="A BRO Growth instala sistemas inteligentes que fazem o trabalho pesado de vender, atender e recuperar cliente pelo seu negócio.">
+<meta property="og:title" content="BRO Growth — Engenharia de Crescimento">
+<meta property="og:description" content="O sistema que vende, atende e recupera cliente por você. Atendimento IA, recuperação de base, sites sob medida e tráfego com dado.">
+<meta property="og:type" content="website">
+<meta property="og:image" content="assets/logo-quadrado.png">
+<link rel="icon" href="assets/logo-quadrado.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#070511;
+    --purple:#7B3FF2;
+    --purple-soft:#a78bfa;
+    --purple-deep:#5200CC;
+    --magenta:#d946ef;
+    --cyan:#67e8f9;
+    --white:#ffffff;
+    --muted:#a89fc9;
+    /* tokens de vidro */
+    --glass-bg:linear-gradient(160deg, rgba(255,255,255,0.10), rgba(255,255,255,0.03));
+    --glass-border:rgba(255,255,255,0.16);
+    --glass-highlight:inset 0 1px 0 rgba(255,255,255,0.20);
+    --glass-shadow:0 24px 60px rgba(0,0,0,0.45);
+    --font:'Inter',system-ui,sans-serif;
+  }
+
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+
+  body{
+    background:var(--bg);
+    color:var(--white);
+    font-family:var(--font);
+    overflow-x:hidden;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  ::selection{ background:var(--purple); color:#fff; }
+
+  /* ---------- FUNDO FUTURISTA ---------- */
+  .aurora{
+    position:fixed; inset:-20%; z-index:0; pointer-events:none;
+    background:
+      radial-gradient(ellipse 42% 34% at 22% 24%, rgba(123,63,242,0.34), transparent 70%),
+      radial-gradient(ellipse 38% 30% at 80% 16%, rgba(217,70,239,0.16), transparent 70%),
+      radial-gradient(ellipse 36% 30% at 74% 78%, rgba(82,0,204,0.28), transparent 70%),
+      radial-gradient(ellipse 26% 22% at 14% 82%, rgba(103,232,249,0.10), transparent 70%);
+    filter:blur(50px);
+    animation:auroraDrift 24s ease-in-out infinite alternate;
+  }
+  @keyframes auroraDrift{
+    from{ transform:translate(0,0) scale(1); }
+    to{ transform:translate(2.5%,-2%) scale(1.06); }
+  }
+  .bg-grid{
+    position:fixed; inset:0; z-index:0; pointer-events:none;
+    background-image:
+      linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+    background-size:54px 54px;
+    -webkit-mask-image:radial-gradient(ellipse 90% 80% at 50% 20%, #000 30%, transparent 80%);
+            mask-image:radial-gradient(ellipse 90% 80% at 50% 20%, #000 30%, transparent 80%);
+  }
+  /* anéis orbitais futuristas do hero */
+  .rings{
+    position:absolute; left:50%; top:42%; transform:translate(-50%,-50%);
+    width:min(120vw, 1050px); aspect-ratio:1/1; z-index:0; pointer-events:none;
+  }
+  .rings i{
+    position:absolute; inset:0; border-radius:50%;
+    border:1px solid rgba(167,139,250,0.14);
+  }
+  .rings i:nth-child(2){ inset:11%; border-color:rgba(167,139,250,0.10); }
+  .rings i:nth-child(3){ inset:23%; border-color:rgba(217,70,239,0.10); }
+  .rings::after{
+    content:""; position:absolute; left:50%; top:0; width:9px; height:9px;
+    border-radius:50%; background:var(--purple-soft);
+    box-shadow:0 0 16px 4px rgba(167,139,250,0.75);
+    transform:translateX(-50%);
+    animation:orbit 26s linear infinite;
+    transform-origin:50% calc(min(120vw,1050px) / 2);
+  }
+  @keyframes orbit{ from{ rotate:0deg; } to{ rotate:360deg; } }
+
+  section{ position:relative; z-index:1; }
+  .container{ max-width:1120px; margin:0 auto; padding:0 24px; }
+
+  /* ---------- VIDRO (token base) ---------- */
+  .glass{
+    position:relative;
+    background:var(--glass-bg);
+    backdrop-filter:blur(22px) saturate(150%);
+    -webkit-backdrop-filter:blur(22px) saturate(150%);
+    border:1px solid var(--glass-border);
+    box-shadow:var(--glass-shadow), var(--glass-highlight);
+    overflow:hidden;
+  }
+  /* reflexo diagonal premium */
+  .glass::before{
+    content:""; position:absolute; inset:0; pointer-events:none;
+    background:linear-gradient(115deg, transparent 20%, rgba(255,255,255,0.09) 38%, rgba(255,255,255,0.02) 48%, transparent 60%);
+  }
+
+  /* ---------- NAV ---------- */
+  .nav-wrap{
+    position:fixed; top:16px; left:0; right:0; z-index:50;
+    display:flex; justify-content:center; padding:0 16px;
+  }
+  .nav{
+    display:flex; align-items:center; gap:1.6rem;
+    border-radius:999px;
+    padding:0.5rem 0.6rem 0.5rem 1.1rem;
+  }
+  .nav-logo{ display:flex; align-items:center; }
+  .nav-logo img{ height:30px; display:block; border-radius:8px; }
+  .nav-links{ display:flex; gap:1.4rem; }
+  .nav-links a{
+    color:var(--muted); text-decoration:none;
+    font-size:0.82rem; font-weight:500;
+    transition:color 0.25s ease;
+    padding:0.5rem 0.1rem; position:relative; z-index:1;
+  }
+  .nav-links a:hover{ color:var(--white); }
+  .nav-cta{
+    display:inline-flex; align-items:center; gap:0.45rem;
+    font-weight:600; font-size:0.82rem;
+    color:#fff; text-decoration:none;
+    background:linear-gradient(180deg, #8d55f7, var(--purple));
+    border:1px solid rgba(255,255,255,0.22);
+    padding:0.6rem 1.15rem; border-radius:999px;
+    box-shadow:0 4px 18px rgba(123,63,242,0.5), inset 0 1px 0 rgba(255,255,255,0.3);
+    transition:transform 0.25s ease, box-shadow 0.25s ease;
+    white-space:nowrap; position:relative; z-index:1;
+  }
+  .nav-cta:hover{ transform:translateY(-1px); box-shadow:0 6px 26px rgba(123,63,242,0.7), inset 0 1px 0 rgba(255,255,255,0.3); }
+  .nav-cta svg{ width:14px; height:14px; fill:currentColor; }
+  @media (max-width:900px){ .nav-links{ display:none; } .nav{ gap:1rem; } }
+
+  /* ---------- PILL ---------- */
+  .pill{
+    display:inline-flex; align-items:center; gap:0.5rem;
+    font-size:0.75rem; font-weight:500; color:var(--purple-soft);
+    background:rgba(123,63,242,0.14);
+    backdrop-filter:blur(12px);
+    border:1px solid rgba(167,139,250,0.32);
+    border-radius:999px;
+    padding:0.4rem 0.95rem;
+    box-shadow:inset 0 1px 0 rgba(255,255,255,0.14);
+  }
+  .pill .dot{
+    width:6px; height:6px; border-radius:50%;
+    background:var(--purple-soft);
+    box-shadow:0 0 8px var(--purple-soft);
+    animation:blink 2.4s ease-in-out infinite;
+  }
+  @keyframes blink{ 0%,100%{opacity:1;} 50%{opacity:0.35;} }
+
+  /* ---------- HERO ---------- */
+  .hero{
+    min-height:100vh;
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    text-align:center;
+    padding:150px 24px 110px;
+    overflow:hidden;
+  }
+
+  /* logo oficial em destaque, sobre pedestal de vidro */
+  .hero-brand{
+    position:relative; z-index:2;
+    width:min(78vw, 440px);
+    margin-bottom:0.6rem;
+    animation:heroFloat 7s ease-in-out infinite;
+    filter:drop-shadow(0 24px 50px rgba(123,63,242,0.45));
+  }
+  .hero-brand img{ width:100%; display:block; }
+  /* reflexo espelhado da logo */
+  .hero-brand::after{
+    content:""; position:absolute; left:0; right:0; top:100%; height:52%;
+    background:inherit;
+    background-image:url("assets/logo-oficial-dark.png");
+    background-size:100% auto; background-repeat:no-repeat;
+    transform:scaleY(-1);
+    opacity:0.15;
+    -webkit-mask-image:linear-gradient(to bottom, transparent 30%, #000 100%);
+            mask-image:linear-gradient(to bottom, transparent 30%, #000 100%);
+    pointer-events:none;
+  }
+  @keyframes heroFloat{
+    0%,100%{ transform:translateY(0); }
+    50%{ transform:translateY(-12px); }
+  }
+
+  .hero h1{
+    position:relative; z-index:2;
+    font-size:clamp(2rem, 4.6vw, 3.4rem);
+    font-weight:700; letter-spacing:-0.03em; line-height:1.1;
+    max-width:820px;
+    margin:1.6rem 0 1.2rem;
+  }
+  .hero h1 .grad{
+    background:linear-gradient(90deg, var(--purple-soft), var(--magenta));
+    -webkit-background-clip:text; background-clip:text; color:transparent;
+  }
+  .hero .sub{
+    position:relative; z-index:2;
+    color:var(--muted); font-size:1.05rem; line-height:1.7;
+    max-width:520px; margin-bottom:2.4rem;
+  }
+  .hero .sub strong{ color:var(--white); font-weight:600; }
+  .hero-actions{ position:relative; z-index:2; display:flex; gap:0.9rem; flex-wrap:wrap; justify-content:center; }
+
+  /* cubos 3D flutuantes ao redor do hero */
+  .cube-f{
+    position:absolute; z-index:1;
+    animation:floatCube var(--dur,9s) ease-in-out infinite;
+    animation-delay:var(--delay,0s);
+    filter:drop-shadow(0 18px 34px rgba(0,0,0,0.55)) drop-shadow(0 0 26px rgba(123,63,242,0.35));
+  }
+  .cube-f img{
+    width:100%; height:100%; display:block; border-radius:18%;
+    transform:rotateX(var(--rx,8deg)) rotateY(var(--ry,-14deg)) rotateZ(var(--rz,0deg));
+  }
+  @keyframes floatCube{
+    0%,100%{ transform:translateY(0); }
+    50%{ transform:translateY(calc(var(--amp,18px) * -1)); }
+  }
+  @media (max-width:760px){ .cube-f{ opacity:0.4; } }
+
+  /* orbes de brilho */
+  .orb{
+    position:absolute; border-radius:50%; z-index:0; pointer-events:none;
+    filter:blur(60px); opacity:0.5;
+  }
+
+  .btn{
+    display:inline-flex; align-items:center; justify-content:center; gap:0.55rem;
+    font-family:var(--font); font-weight:600; font-size:0.92rem;
+    text-decoration:none; border-radius:999px;
+    padding:0.85rem 1.7rem; min-height:44px;
+    transition:transform 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
+    cursor:pointer;
+  }
+  .btn svg{ width:16px; height:16px; fill:currentColor; }
+  .btn-primary{
+    color:#fff;
+    background:linear-gradient(180deg, #8d55f7, var(--purple));
+    border:1px solid rgba(255,255,255,0.22);
+    box-shadow:0 6px 24px rgba(123,63,242,0.55), inset 0 1px 0 rgba(255,255,255,0.3);
+  }
+  .btn-primary:hover{ transform:translateY(-2px); box-shadow:0 10px 34px rgba(123,63,242,0.75), inset 0 1px 0 rgba(255,255,255,0.3); }
+  .btn-ghost{
+    color:var(--white);
+    background:rgba(255,255,255,0.06);
+    backdrop-filter:blur(12px);
+    border:1px solid rgba(255,255,255,0.18);
+    box-shadow:inset 0 1px 0 rgba(255,255,255,0.14);
+  }
+  .btn-ghost:hover{ background:rgba(255,255,255,0.12); transform:translateY(-2px); }
+
+  /* ---------- FAIXA ---------- */
+  .strip-wrap{ position:relative; z-index:1; padding:0 24px; margin-top:-30px; }
+  .strip{
+    max-width:1120px; margin:0 auto;
+    border-radius:18px;
+    padding:1.15rem 1.5rem;
+    display:flex; gap:2.2rem; align-items:center; justify-content:center; flex-wrap:wrap;
+  }
+  .strip span{
+    font-size:0.76rem; font-weight:600; letter-spacing:0.14em; text-transform:uppercase;
+    color:var(--muted); display:inline-flex; align-items:center; gap:0.6rem;
+    position:relative; z-index:1;
+  }
+  .strip svg{ width:15px; height:15px; stroke:var(--purple-soft); fill:none; stroke-width:2; }
+
+  /* ---------- SEÇÕES ---------- */
+  .section{ padding:110px 0; }
+  .section-head{
+    text-align:center; max-width:660px; margin:0 auto 3.2rem;
+    display:flex; flex-direction:column; align-items:center; gap:1.1rem;
+  }
+  .section-head h2{
+    font-size:clamp(1.7rem, 3.4vw, 2.5rem);
+    font-weight:700; letter-spacing:-0.02em; line-height:1.2;
+  }
+  .section-head p{ color:var(--muted); font-size:1rem; line-height:1.75; }
+  .section-head p strong{ color:var(--white); font-weight:600; }
+
+  .reveal{ opacity:0; transform:translateY(26px); transition:opacity 0.7s cubic-bezier(.2,.8,.2,1), transform 0.7s cubic-bezier(.2,.8,.2,1); }
+  .reveal.in{ opacity:1; transform:translateY(0); }
+
+  /* ---------- PAINEL DIAGNÓSTICO ---------- */
+  .panel{ border-radius:24px; padding:2.2rem; }
+  .panel-head{
+    display:flex; align-items:center; gap:0.5rem;
+    padding-bottom:1.4rem; margin-bottom:1.6rem;
+    border-bottom:1px solid rgba(255,255,255,0.10);
+    position:relative; z-index:1;
+  }
+  .panel-head .dots{ display:flex; gap:6px; }
+  .panel-head .dots i{ width:10px; height:10px; border-radius:50%; }
+  .panel-head .dots i:first-child{ background:#ff5f57; }
+  .panel-head .dots i:nth-child(2){ background:#febc2e; }
+  .panel-head .dots i:nth-child(3){ background:#28c840; }
+  .panel-head span{ margin-left:0.8rem; font-size:0.8rem; color:var(--muted); font-weight:500; }
+
+  .pain-grid{
+    display:grid; grid-template-columns:repeat(2, minmax(0,1fr));
+    gap:0.9rem; position:relative; z-index:1;
+  }
+  @media (max-width:760px){ .pain-grid{ grid-template-columns:1fr; } }
+  .pain{
+    display:flex; gap:0.9rem; align-items:flex-start;
+    background:rgba(255,255,255,0.045);
+    border:1px solid rgba(255,255,255,0.10);
+    box-shadow:inset 0 1px 0 rgba(255,255,255,0.10);
+    border-radius:14px;
+    padding:1.05rem 1.15rem;
+    transition:border-color 0.3s ease, background 0.3s ease;
+  }
+  .pain:hover{ border-color:rgba(167,139,250,0.4); background:rgba(123,63,242,0.10); }
+  .pain .ic{
+    flex:0 0 auto; width:30px; height:30px; border-radius:9px;
+    background:rgba(255,95,87,0.14); border:1px solid rgba(255,95,87,0.32);
+    display:flex; align-items:center; justify-content:center;
+  }
+  .pain .ic svg{ width:14px; height:14px; stroke:#ff8a84; fill:none; stroke-width:2.2; stroke-linecap:round; }
+  .pain p{ color:var(--muted); font-size:0.93rem; line-height:1.55; padding-top:0.2rem; }
+  .panel-foot{
+    margin-top:1.6rem; padding-top:1.5rem;
+    border-top:1px solid rgba(255,255,255,0.10);
+    display:flex; align-items:center; gap:0.8rem;
+    color:var(--white); font-size:0.95rem; font-weight:500;
+    position:relative; z-index:1;
+  }
+  .panel-foot .ic{
+    width:30px; height:30px; border-radius:9px; flex:0 0 auto;
+    background:rgba(123,63,242,0.22); border:1px solid rgba(167,139,250,0.45);
+    display:flex; align-items:center; justify-content:center;
+  }
+  .panel-foot .ic svg{ width:14px; height:14px; stroke:var(--purple-soft); fill:none; stroke-width:2.2; stroke-linecap:round; }
+
+  /* ---------- CARDS DE VIDRO ---------- */
+  .grid-4{ display:grid; grid-template-columns:repeat(2, minmax(0,1fr)); gap:1.1rem; }
+  @media (max-width:760px){ .grid-4{ grid-template-columns:1fr; } }
+  .grid-3{ display:grid; grid-template-columns:repeat(3, minmax(0,1fr)); gap:1.1rem; }
+  @media (max-width:960px){ .grid-3{ grid-template-columns:repeat(2, minmax(0,1fr)); } }
+  @media (max-width:640px){ .grid-3{ grid-template-columns:1fr; } }
+
+  .card{
+    border-radius:20px;
+    padding:1.8rem;
+    transition:transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+  }
+  .card:hover{
+    transform:translateY(-4px);
+    border-color:rgba(167,139,250,0.45);
+    box-shadow:0 30px 70px rgba(123,63,242,0.22), var(--glass-highlight);
+  }
+  .card > *{ position:relative; z-index:1; }
+  .card .ic{
+    width:44px; height:44px; border-radius:12px;
+    background:linear-gradient(180deg, rgba(141,85,247,0.34), rgba(123,63,242,0.16));
+    border:1px solid rgba(167,139,250,0.4);
+    box-shadow:inset 0 1px 0 rgba(255,255,255,0.24);
+    display:flex; align-items:center; justify-content:center;
+    margin-bottom:1.15rem;
+  }
+  .card .ic svg{ width:20px; height:20px; stroke:var(--purple-soft); fill:none; stroke-width:1.8; stroke-linecap:round; stroke-linejoin:round; }
+  .card h3{
+    font-size:1.05rem; font-weight:700; letter-spacing:-0.01em;
+    margin-bottom:0.55rem;
+    display:flex; align-items:center; gap:0.6rem; flex-wrap:wrap;
+  }
+  .card h3 .tag{
+    font-size:0.6rem; font-weight:700; letter-spacing:0.06em;
+    background:linear-gradient(180deg, #8d55f7, var(--purple)); color:#fff;
+    border-radius:999px; padding:0.16rem 0.55rem;
+    box-shadow:inset 0 1px 0 rgba(255,255,255,0.3);
+  }
+  .card p{ color:var(--muted); font-size:0.92rem; line-height:1.65; }
+
+  .note{ margin-top:2rem; text-align:center; color:var(--muted); font-size:0.92rem; }
+  .note strong{ color:var(--white); font-weight:600; }
+
+  /* ---------- POR QUE ---------- */
+  .why-grid{
+    display:grid; grid-template-columns:repeat(2, minmax(0,1fr));
+    border-radius:20px; overflow:hidden;
+  }
+  @media (max-width:760px){ .why-grid{ grid-template-columns:1fr; } }
+  .why{
+    display:flex; gap:0.95rem; align-items:flex-start;
+    padding:1.6rem 1.7rem;
+    border-bottom:1px solid rgba(255,255,255,0.09);
+    transition:background 0.3s ease;
+    position:relative; z-index:1;
+  }
+  .why:hover{ background:rgba(123,63,242,0.10); }
+  .why-grid .why:nth-child(odd){ border-right:1px solid rgba(255,255,255,0.09); }
+  @media (max-width:760px){ .why-grid .why:nth-child(odd){ border-right:none; } }
+  .why-grid .why:nth-last-child(1),
+  .why-grid .why:nth-last-child(2){ border-bottom:none; }
+  @media (max-width:760px){ .why-grid .why:nth-last-child(2){ border-bottom:1px solid rgba(255,255,255,0.09); } }
+  .why .ic{
+    flex:0 0 auto; width:26px; height:26px; border-radius:50%;
+    background:rgba(123,63,242,0.20); border:1px solid rgba(167,139,250,0.45);
+    box-shadow:inset 0 1px 0 rgba(255,255,255,0.2);
+    display:flex; align-items:center; justify-content:center;
+    margin-top:0.1rem;
+  }
+  .why .ic svg{ width:13px; height:13px; stroke:var(--purple-soft); fill:none; stroke-width:2.4; stroke-linecap:round; stroke-linejoin:round; }
+  .why h3{ font-size:0.98rem; font-weight:700; margin-bottom:0.3rem; letter-spacing:-0.01em; }
+  .why p{ color:var(--muted); font-size:0.9rem; line-height:1.6; }
+
+  /* ---------- CTA ---------- */
+  .cta{ padding:130px 0; position:relative; overflow:hidden; }
+  .cta-bloom{
+    position:absolute; left:50%; top:50%;
+    transform:translate(-50%,-50%);
+    width:min(95vw, 860px); aspect-ratio:1/1;
+    background-image:url("assets/bloom-bro.png");
+    background-size:cover; background-position:center;
+    mix-blend-mode:screen; opacity:0.55;
+    -webkit-mask-image:radial-gradient(circle at 50% 50%, #000 32%, transparent 70%);
+            mask-image:radial-gradient(circle at 50% 50%, #000 32%, transparent 70%);
+    animation:bloomDrift 16s ease-in-out infinite;
+    pointer-events:none;
+  }
+  @keyframes bloomDrift{
+    0%,100%{ transform:translate(-50%,-50%) scale(1) rotate(0deg); }
+    50%{ transform:translate(-50%,-50%) scale(1.06) rotate(3deg); }
+  }
+  .cta-card{
+    position:relative; z-index:2;
+    max-width:760px; margin:0 auto;
+    border-radius:28px;
+    padding:3.5rem 2.5rem;
+    text-align:center;
+    display:flex; flex-direction:column; align-items:center;
+  }
+  .cta-card > *{ position:relative; z-index:1; }
+  .cta-logo{ width:86px; margin-bottom:2rem; perspective:500px; filter:drop-shadow(0 0 38px rgba(123,63,242,0.75)); }
+  .cta-logo img{
+    width:100%; display:block; border-radius:20px;
+    animation:alive 7s ease-in-out infinite;
+    transform-style:preserve-3d;
+  }
+  @keyframes alive{
+    0%   { transform:rotateY(0deg) scale(1); }
+    12%  { transform:rotateY(-36deg) rotateZ(-4deg) scale(1.05); }
+    24%  { transform:rotateY(0deg) scale(0.98); }
+    38%  { transform:rotateY(40deg) rotateZ(4deg) scale(1.06); }
+    52%  { transform:rotateY(0deg) scale(1); }
+    70%  { transform:rotateX(12deg) scale(1.02); }
+    100% { transform:rotateY(0deg) scale(1); }
+  }
+  .cta h2{
+    font-size:clamp(1.9rem, 4.2vw, 2.8rem);
+    font-weight:700; letter-spacing:-0.025em; line-height:1.12;
+    max-width:640px; margin-bottom:1.2rem;
+  }
+  .cta p{ color:var(--muted); max-width:480px; margin-bottom:2.4rem; line-height:1.7; }
+  .cta-actions{ display:flex; gap:0.9rem; flex-wrap:wrap; justify-content:center; }
+
+  /* ---------- FOOTER ---------- */
+  footer{
+    border-top:1px solid rgba(255,255,255,0.09);
+    padding:3rem 0;
+    position:relative; z-index:1;
+    background:rgba(255,255,255,0.02);
+    backdrop-filter:blur(10px);
+  }
+  footer .container{
+    display:flex; align-items:center; justify-content:space-between;
+    gap:1.4rem; flex-wrap:wrap;
+  }
+  footer .foot-logo img{ height:32px; display:block; }
+  .foot-social{ display:flex; gap:1.6rem; }
+  .foot-social a{
+    display:inline-flex; align-items:center; gap:0.5rem;
+    color:var(--muted); text-decoration:none; font-size:0.85rem;
+    transition:color 0.25s ease; padding:0.4rem 0;
+  }
+  .foot-social a:hover{ color:var(--purple-soft); }
+  .foot-social svg{ width:16px; height:16px; fill:currentColor; }
+  footer .copy{
+    width:100%; text-align:center;
+    color:var(--muted); font-size:0.75rem; opacity:0.65; margin-top:1.4rem;
+  }
+  @media (max-width:760px){ footer .container{ flex-direction:column; justify-content:center; } }
+
+  .wa-float{
+    position:fixed; right:20px; bottom:20px; z-index:40;
+    width:54px; height:54px; border-radius:50%;
+    background:#25D366;
+    display:flex; align-items:center; justify-content:center;
+    box-shadow:0 8px 30px rgba(37,211,102,0.45), inset 0 1px 0 rgba(255,255,255,0.35);
+    transition:transform 0.3s ease;
+  }
+  .wa-float:hover{ transform:scale(1.08); }
+  .wa-float svg{ width:26px; height:26px; fill:#fff; }
+
+  @media (prefers-reduced-motion: reduce){
+    *{ animation:none !important; transition:none !important; }
+    .reveal{ opacity:1 !important; transform:none !important; }
+  }
+</style>
+</head>
+<body>
+
+<div class="aurora" aria-hidden="true"></div>
+<div class="bg-grid" aria-hidden="true"></div>
+
+<!-- NAV -->
+<div class="nav-wrap">
+  <nav class="nav glass">
+    <a class="nav-logo" href="#topo" aria-label="BRO Growth — início"><img src="assets/logo-quadrado.png" alt="BRO Growth"></a>
+    <div class="nav-links">
+      <a href="#quem-somos">Quem somos</a>
+      <a href="#o-que-fazemos">O que fazemos</a>
+      <a href="#como-fazemos">Como fazemos</a>
+      <a href="#entregas">Entregas</a>
+      <a href="#por-que">Por quê</a>
+    </div>
+    <a class="nav-cta" href="https://wa.me/5527988384812?text=Quero%20conhecer%20o%20sistema%20BRO%20Growth" target="_blank" rel="noopener">
+      <svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 0 0-8.66 15L2 22l5.2-1.36A10 10 0 1 0 12 2zm5.46 14.12c-.23.65-1.34 1.24-1.87 1.28-.5.04-.97.23-3.27-.68-2.77-1.09-4.53-3.9-4.67-4.08-.13-.18-1.11-1.48-1.11-2.82 0-1.34.7-2 .95-2.27.25-.27.55-.34.73-.34.18 0 .37 0 .53.01.17.01.4-.06.62.48.23.55.78 1.89.85 2.03.07.14.11.3.02.48-.09.18-.13.29-.27.45-.14.16-.29.36-.41.48-.14.14-.28.29-.12.56.16.27.72 1.19 1.55 1.93 1.07.95 1.97 1.25 2.25 1.39.28.14.44.12.6-.07.16-.19.69-.8.87-1.08.18-.28.37-.23.62-.14.25.09 1.59.75 1.86.89.27.14.45.2.52.32.07.12.07.65-.16 1.3z"/></svg>
+      Falar no WhatsApp
+    </a>
+  </nav>
+</div>
+
+<!-- HERO -->
+<section class="hero" id="topo">
+  <div class="rings" aria-hidden="true"><i></i><i></i><i></i></div>
+  <div class="orb" style="width:320px;height:320px;background:var(--purple);left:-90px;top:16%;"></div>
+  <div class="orb" style="width:260px;height:260px;background:var(--magenta);right:-70px;top:56%;opacity:0.3;"></div>
+
+  <div class="cube-f" style="width:110px;height:110px;left:9%;top:22%; --dur:9s;  --amp:20px; --rx:12deg; --ry:-24deg; --rz:-6deg;" aria-hidden="true"><img src="assets/logo-quadrado.png" alt=""></div>
+  <div class="cube-f" style="width:64px; height:64px; left:16%;bottom:20%; --dur:11s; --delay:0.8s; --amp:14px; --rx:-8deg; --ry:18deg; --rz:8deg;" aria-hidden="true"><img src="assets/logo-quadrado.png" alt=""></div>
+  <div class="cube-f" style="width:92px; height:92px; right:10%;top:26%; --dur:10s; --delay:1.6s; --amp:18px; --rx:10deg; --ry:26deg; --rz:-10deg;" aria-hidden="true"><img src="assets/logo-quadrado.png" alt=""></div>
+  <div class="cube-f" style="width:56px; height:56px; right:18%;bottom:24%; --dur:8s; --delay:0.4s; --amp:12px; --rx:-12deg; --ry:-20deg; --rz:12deg;" aria-hidden="true"><img src="assets/logo-quadrado.png" alt=""></div>
+
+  <div class="hero-brand">
+    <img src="assets/logo-oficial-dark.png" alt="BRO Growth">
+  </div>
+  <span class="pill"><span class="dot"></span> Tecnologia e crescimento digital</span>
+  <h1>O sistema que <span class="grad">vende, atende e recupera</span> cliente por você.</h1>
+  <p class="sub">Você não precisa contratar mais gente. Você não precisa estar disponível 24 horas por dia. <strong>O sistema faz.</strong></p>
+  <div class="hero-actions">
+    <a class="btn btn-primary" href="https://wa.me/5527988384812?text=Quero%20conhecer%20o%20sistema%20BRO%20Growth" target="_blank" rel="noopener">
+      <svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 0 0-8.66 15L2 22l5.2-1.36A10 10 0 1 0 12 2zm5.46 14.12c-.23.65-1.34 1.24-1.87 1.28-.5.04-.97.23-3.27-.68-2.77-1.09-4.53-3.9-4.67-4.08-.13-.18-1.11-1.48-1.11-2.82 0-1.34.7-2 .95-2.27.25-.27.55-.34.73-.34.18 0 .37 0 .53.01.17.01.4-.06.62.48.23.55.78 1.89.85 2.03.07.14.11.3.02.48-.09.18-.13.29-.27.45-.14.16-.29.36-.41.48-.14.14-.28.29-.12.56.16.27.72 1.19 1.55 1.93 1.07.95 1.97 1.25 2.25 1.39.28.14.44.12.6-.07.16-.19.69-.8.87-1.08.18-.28.37-.23.62-.14.25.09 1.59.75 1.86.89.27.14.45.2.52.32.07.12.07.65-.16 1.3z"/></svg>
+      Falar no WhatsApp
+    </a>
+    <a class="btn btn-ghost" href="#quem-somos">Ver como funciona</a>
+  </div>
+</section>
+
+<!-- FAIXA DAS QUATRO FRENTES -->
+<div class="strip-wrap">
+  <div class="strip glass">
+    <span><svg viewBox="0 0 24 24"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg> Atendimento IA</span>
+    <span><svg viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 1 2.6 6.4M3 12V6m0 6h6"/></svg> Recuperação de base</span>
+    <span><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 0 20 15.3 15.3 0 0 1 0-20z"/></svg> Sites sob medida</span>
+    <span><svg viewBox="0 0 24 24"><path d="M3 3v18h18M7 15l4-4 3 3 5-6"/></svg> Tráfego e dados</span>
+  </div>
+</div>
+
+<!-- QUEM SOMOS -->
+<section class="section" id="quem-somos">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="pill">Quem somos</span>
+      <h2>O trabalho pesado de vender, atender e recuperar cliente. Feito por sistema.</h2>
+    </div>
+    <div class="panel glass reveal" style="max-width:820px;margin:0 auto;">
+      <p style="color:var(--muted);line-height:1.8;position:relative;z-index:1;">A BRO Growth é uma empresa de tecnologia e crescimento digital. A gente instala sistemas inteligentes que fazem o trabalho pesado de vender, atender e recuperar cliente. Você não precisa contratar mais gente pra isso. Você não precisa estar disponível 24 horas por dia. <strong style="color:var(--white);">O sistema faz.</strong></p>
+      <p style="color:var(--muted);line-height:1.8;margin-top:1rem;position:relative;z-index:1;">Não somos agência tradicional que entrega post e anúncio e some. Também não somos empresa engessada que vende pacote pronto. Cada negócio tem uma dor diferente, e a gente constrói a solução certa pra cada um. <strong style="color:var(--white);">Se o que existe no mercado não resolve, a gente cria do zero.</strong></p>
+    </div>
+  </div>
+</section>
+
+<!-- O QUE FAZEMOS -->
+<section class="section" id="o-que-fazemos" style="padding-top:0;">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="pill">O que fazemos</span>
+      <h2>Os pontos onde toda empresa perde dinheiro sem perceber</h2>
+    </div>
+    <div class="panel glass reveal">
+      <div class="panel-head">
+        <div class="dots"><i></i><i></i><i></i></div>
+        <span>diagnóstico — onde o dinheiro está vazando</span>
+      </div>
+      <div class="pain-grid">
+        <div class="pain"><div class="ic"><svg viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></svg></div><p>Cliente manda mensagem e demora pra ser respondido.</p></div>
+        <div class="pain"><div class="ic"><svg viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></svg></div><p>Cliente antigo que sumiu e ninguém corre atrás.</p></div>
+        <div class="pain"><div class="ic"><svg viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></svg></div><p>Agenda com horário vago que podia estar cheia.</p></div>
+        <div class="pain"><div class="ic"><svg viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></svg></div><p>Site que não converte visita em venda.</p></div>
+        <div class="pain"><div class="ic"><svg viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></svg></div><p>Anúncio rodando sem gerar retorno.</p></div>
+        <div class="pain"><div class="ic"><svg viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></svg></div><p>Decisão de crescimento tomada no feeling, sem direção clara.</p></div>
+      </div>
+      <div class="panel-foot">
+        <div class="ic"><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg></div>
+        A gente entra exatamente nesses pontos e coloca a solução certa pra cada um.
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- COMO FAZEMOS -->
+<section class="section" id="como-fazemos">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="pill">Como fazemos</span>
+      <h2>Quatro frentes que rodam juntas</h2>
+    </div>
+    <div class="grid-4">
+      <div class="card glass reveal">
+        <div class="ic"><svg viewBox="0 0 24 24"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg></div>
+        <h3>Atendimento e vendas automatizados</h3>
+        <p>Colocamos inteligência artificial pra atender, qualificar e agendar cliente. Sem depender de alguém estar disponível o tempo todo.</p>
+      </div>
+      <div class="card glass reveal">
+        <div class="ic"><svg viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 1 2.6 6.4M3 12V6m0 6h6"/></svg></div>
+        <h3>Recuperação de base</h3>
+        <p>Ativamos as listas de cliente antigo que estão paradas no seu CRM ou na sua agenda. A mensagem certa chega na hora certa, e gente que já te conhece volta a comprar.</p>
+      </div>
+      <div class="card glass reveal">
+        <div class="ic"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 0 20 15.3 15.3 0 0 1 0-20z"/></svg></div>
+        <h3>Presença digital que converte</h3>
+        <p>Criamos sites, landing pages e sistemas próprios feitos sob medida pro seu negócio. Não é template pronto. É estrutura pensada pra transformar visita em venda.</p>
+      </div>
+      <div class="card glass reveal">
+        <div class="ic"><svg viewBox="0 0 24 24"><path d="M3 3v18h18M7 15l4-4 3 3 5-6"/></svg></div>
+        <h3>Tráfego e dados</h3>
+        <p>Cuidamos dos anúncios em Meta e Google. Cada real investido é direcionado pra quem tem intenção real de comprar. Nada de desperdício em curtida vazia.</p>
+      </div>
+    </div>
+    <p class="note reveal">Tudo isso roda com <strong>acompanhamento técnico constante</strong>. A gente garante que o sistema não pare.</p>
+  </div>
+</section>
+
+<!-- O QUE A GENTE ENTREGA -->
+<section class="section" id="entregas" style="padding-top:0;">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="pill">O que a gente entrega</span>
+      <h2>Sistemas que trabalham enquanto você vive</h2>
+    </div>
+    <div class="grid-3">
+      <div class="card glass reveal">
+        <div class="ic"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg></div>
+        <h3>Um atendente que nunca dorme</h3>
+        <p>Assistente de inteligência artificial no seu WhatsApp que responde cliente na hora, entende o que a pessoa precisa e já marca o horário certo. Funciona de madrugada, fim de semana, feriado. Sempre.</p>
+      </div>
+      <div class="card glass reveal">
+        <div class="ic"><svg viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 1 2.6 6.4M3 12V6m0 6h6"/></svg></div>
+        <h3>Trazer de volta quem sumiu</h3>
+        <p>Ativação automática da sua base antiga com a mensagem certa na hora certa. Cliente esquecido vira venda nova, sem esforço manual.</p>
+      </div>
+      <div class="card glass reveal">
+        <div class="ic"><svg viewBox="0 0 24 24"><path d="M4 5h16a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1zM3 21h18M9 9l-2 3 2 3M15 9l2 3-2 3"/></svg></div>
+        <h3>Sites, landing pages e sistemas sob medida <span class="tag">NOVO</span></h3>
+        <p>Construção de presença digital profissional feita pro seu negócio, não pra qualquer negócio. Se a sua operação precisa de algo específico que não existe pronto, a gente desenvolve o sistema do zero.</p>
+      </div>
+      <div class="card glass reveal">
+        <div class="ic"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></div>
+        <h3>A manutenção que mantém tudo rodando</h3>
+        <p>Cuidado técnico por trás de toda a operação. Servidor, sistema, hospedagem da inteligência artificial do seu negócio. Nada para de funcionar.</p>
+      </div>
+      <div class="card glass reveal">
+        <div class="ic"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
+        <h3>Um sócio de estratégia, sem virar sócio</h3>
+        <p>A gente participa das decisões de venda, tráfego e dado como se fosse parte do seu time. Sem o custo de contratar um executivo.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- POR QUE CONTRATAR -->
+<section class="section" id="por-que" style="padding-top:0;">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="pill">Por que contratar a BRO Growth</span>
+      <h2>O que muda no seu negócio</h2>
+    </div>
+    <div class="why-grid glass reveal">
+      <div class="why">
+        <div class="ic"><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg></div>
+        <div><h3>Você para de perder venda por demora</h3><p>Todo cliente é respondido na hora, em qualquer horário.</p></div>
+      </div>
+      <div class="why">
+        <div class="ic"><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg></div>
+        <div><h3>Você recupera dinheiro que já era seu</h3><p>Cliente antigo volta a comprar sem esforço manual.</p></div>
+      </div>
+      <div class="why">
+        <div class="ic"><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg></div>
+        <div><h3>Você tem presença digital que trabalha por você</h3><p>Site e landing page pensados pra converter, não só pra existir.</p></div>
+      </div>
+      <div class="why">
+        <div class="ic"><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg></div>
+        <div><h3>Você resolve o que ninguém mais resolve</h3><p>Se seu negócio tem uma necessidade específica, a gente cria o sistema sob medida.</p></div>
+      </div>
+      <div class="why">
+        <div class="ic"><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg></div>
+        <div><h3>Você ganha tempo</h3><p>Tarefa repetitiva sai da sua mão e passa pra tecnologia.</p></div>
+      </div>
+      <div class="why">
+        <div class="ic"><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg></div>
+        <div><h3>Você toma decisão com dado, não com feeling</h3><p>Tráfego e venda são acompanhados de perto, com ajuste constante.</p></div>
+      </div>
+      <div class="why">
+        <div class="ic"><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg></div>
+        <div><h3>Você tem parceiro, não fornecedor</h3><p>A gente acompanha o resultado. Não entrega e some.</p></div>
+      </div>
+      <div class="why">
+        <div class="ic"><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg></div>
+        <div><h3>Você escala sem contratar</h3><p>O sistema cresce junto com o seu negócio, sem custo de folha extra.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta" id="contato">
+  <div class="cta-bloom" aria-hidden="true"></div>
+  <div class="container">
+    <div class="cta-card glass">
+      <div class="cta-logo"><img src="assets/logo-quadrado.png" alt="BRO Growth"></div>
+      <h2>Quer ver isso rodando no seu negócio?</h2>
+      <p>A gente monta o diagnóstico e mostra exatamente onde o seu negócio está perdendo dinheiro hoje.</p>
+      <div class="cta-actions">
+        <a class="btn btn-primary" href="https://wa.me/5527988384812?text=Quero%20conhecer%20o%20sistema%20BRO%20Growth" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 0 0-8.66 15L2 22l5.2-1.36A10 10 0 1 0 12 2zm5.46 14.12c-.23.65-1.34 1.24-1.87 1.28-.5.04-.97.23-3.27-.68-2.77-1.09-4.53-3.9-4.67-4.08-.13-.18-1.11-1.48-1.11-2.82 0-1.34.7-2 .95-2.27.25-.27.55-.34.73-.34.18 0 .37 0 .53.01.17.01.4-.06.62.48.23.55.78 1.89.85 2.03.07.14.11.3.02.48-.09.18-.13.29-.27.45-.14.16-.29.36-.41.48-.14.14-.28.29-.12.56.16.27.72 1.19 1.55 1.93 1.07.95 1.97 1.25 2.25 1.39.28.14.44.12.6-.07.16-.19.69-.8.87-1.08.18-.28.37-.23.62-.14.25.09 1.59.75 1.86.89.27.14.45.2.52.32.07.12.07.65-.16 1.3z"/></svg>
+          +55 27 98838-4812
+        </a>
+        <a class="btn btn-ghost" href="https://instagram.com/brogrowth.digital" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24"><path d="M12 2.2c3.2 0 3.6 0 4.8.07 1.17.05 1.8.25 2.23.41.56.22.96.48 1.38.9.42.42.68.82.9 1.38.16.42.36 1.06.41 2.23.06 1.27.07 1.65.07 4.85s0 3.58-.07 4.85c-.05 1.17-.25 1.8-.41 2.23-.22.56-.48.96-.9 1.38-.42.42-.82.68-1.38.9-.42.16-1.06.36-2.23.41-1.27.06-1.65.07-4.85.07s-3.58 0-4.85-.07c-1.17-.05-1.8-.25-2.23-.41a3.72 3.72 0 0 1-1.38-.9 3.72 3.72 0 0 1-.9-1.38c-.16-.42-.36-1.06-.41-2.23C2.2 15.62 2.2 15.24 2.2 12s0-3.58.07-4.85c.05-1.17.25-1.8.41-2.23.22-.56.48-.96.9-1.38.42-.42.82-.68 1.38-.9.42-.16 1.06-.36 2.23-.41C8.42 2.2 8.8 2.2 12 2.2zm0 1.8c-3.15 0-3.52 0-4.77.07-1.08.05-1.66.23-2.05.38-.51.2-.88.44-1.26.82-.38.38-.62.75-.82 1.26-.15.39-.33.97-.38 2.05C2.65 9.83 2.65 10.2 2.65 12s0 3.52.07 4.77c.05 1.08.23 1.66.38 2.05.2.51.44.88.82 1.26.38.38.75.62 1.26.82.39.15.97.33 2.05.38 1.25.06 1.62.07 4.77.07s3.52 0 4.77-.07c1.08-.05 1.66-.23 2.05-.38.51-.2.88-.44 1.26-.82.38-.38.62-.75.82-1.26.15-.39.33-.97.38-2.05.06-1.25.07-1.62.07-4.77s0-3.52-.07-4.77c-.05-1.08-.23-1.66-.38-2.05-.2-.51-.44-.88-.82-1.26a3.4 3.4 0 0 0-1.26-.82c-.39-.15-.97-.33-2.05-.38C15.52 4 15.15 4 12 4zm0 3.1a4.9 4.9 0 1 1 0 9.8 4.9 4.9 0 0 1 0-9.8zm0 1.8a3.1 3.1 0 1 0 0 6.2 3.1 3.1 0 0 0 0-6.2zm5.1-3.05a1.15 1.15 0 1 1 0 2.3 1.15 1.15 0 0 1 0-2.3z"/></svg>
+          @brogrowth.digital
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <a class="foot-logo" href="#topo"><img src="assets/logo-oficial-dark.png" alt="BRO Growth"></a>
+    <div class="foot-social">
+      <a href="https://instagram.com/brogrowth.digital" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24"><path d="M12 2.2c3.2 0 3.6 0 4.8.07 1.17.05 1.8.25 2.23.41.56.22.96.48 1.38.9.42.42.68.82.9 1.38.16.42.36 1.06.41 2.23.06 1.27.07 1.65.07 4.85s0 3.58-.07 4.85c-.05 1.17-.25 1.8-.41 2.23-.22.56-.48.96-.9 1.38-.42.42-.82.68-1.38.9-.42.16-1.06.36-2.23.41-1.27.06-1.65.07-4.85.07s-3.58 0-4.85-.07c-1.17-.05-1.8-.25-2.23-.41a3.72 3.72 0 0 1-1.38-.9 3.72 3.72 0 0 1-.9-1.38c-.16-.42-.36-1.06-.41-2.23C2.2 15.62 2.2 15.24 2.2 12s0-3.58.07-4.85c.05-1.17.25-1.8.41-2.23.22-.56.48-.96.9-1.38.42-.42.82-.68 1.38-.9.42-.16 1.06-.36 2.23-.41C8.42 2.2 8.8 2.2 12 2.2zm0 1.8c-3.15 0-3.52 0-4.77.07-1.08.05-1.66.23-2.05.38-.51.2-.88.44-1.26.82-.38.38-.62.75-.82 1.26-.15.39-.33.97-.38 2.05C2.65 9.83 2.65 10.2 2.65 12s0 3.52.07 4.77c.05 1.08.23 1.66.38 2.05.2.51.44.88.82 1.26.38.38.75.62 1.26.82.39.15.97.33 2.05.38 1.25.06 1.62.07 4.77.07s3.52 0 4.77-.07c1.08-.05 1.66-.23 2.05-.38.51-.2.88-.44 1.26-.82.38-.38.62-.75.82-1.26.15-.39.33-.97.38-2.05.06-1.25.07-1.62.07-4.77s0-3.52-.07-4.77c-.05-1.08-.23-1.66-.38-2.05-.2-.51-.44-.88-.82-1.26a3.4 3.4 0 0 0-1.26-.82c-.39-.15-.97-.33-2.05-.38C15.52 4 15.15 4 12 4zm0 3.1a4.9 4.9 0 1 1 0 9.8 4.9 4.9 0 0 1 0-9.8zm0 1.8a3.1 3.1 0 1 0 0 6.2 3.1 3.1 0 0 0 0-6.2zm5.1-3.05a1.15 1.15 0 1 1 0 2.3 1.15 1.15 0 0 1 0-2.3z"/></svg>
+        @brogrowth.digital
+      </a>
+      <a href="https://wa.me/5527988384812" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 0 0-8.66 15L2 22l5.2-1.36A10 10 0 1 0 12 2zm5.46 14.12c-.23.65-1.34 1.24-1.87 1.28-.5.04-.97.23-3.27-.68-2.77-1.09-4.53-3.9-4.67-4.08-.13-.18-1.11-1.48-1.11-2.82 0-1.34.7-2 .95-2.27.25-.27.55-.34.73-.34.18 0 .37 0 .53.01.17.01.4-.06.62.48.23.55.78 1.89.85 2.03.07.14.11.3.02.48-.09.18-.13.29-.27.45-.14.16-.29.36-.41.48-.14.14-.28.29-.12.56.16.27.72 1.19 1.55 1.93 1.07.95 1.97 1.25 2.25 1.39.28.14.44.12.6-.07.16-.19.69-.8.87-1.08.18-.28.37-.23.62-.14.25.09 1.59.75 1.86.89.27.14.45.2.52.32.07.12.07.65-.16 1.3z"/></svg>
+        +55 27 98838-4812
+      </a>
+    </div>
+    <div class="copy">© 2026 BRO Growth — Engenharia digital de crescimento</div>
+  </div>
+</footer>
+
+<!-- WhatsApp flutuante -->
+<a class="wa-float" href="https://wa.me/5527988384812?text=Quero%20conhecer%20o%20sistema%20BRO%20Growth" target="_blank" rel="noopener" aria-label="Falar no WhatsApp">
+  <svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 0 0-8.66 15L2 22l5.2-1.36A10 10 0 1 0 12 2zm5.46 14.12c-.23.65-1.34 1.24-1.87 1.28-.5.04-.97.23-3.27-.68-2.77-1.09-4.53-3.9-4.67-4.08-.13-.18-1.11-1.48-1.11-2.82 0-1.34.7-2 .95-2.27.25-.27.55-.34.73-.34.18 0 .37 0 .53.01.17.01.4-.06.62.48.23.55.78 1.89.85 2.03.07.14.11.3.02.48-.09.18-.13.29-.27.45-.14.16-.29.36-.41.48-.14.14-.28.29-.12.56.16.27.72 1.19 1.55 1.93 1.07.95 1.97 1.25 2.25 1.39.28.14.44.12.6-.07.16-.19.69-.8.87-1.08.18-.28.37-.23.62-.14.25.09 1.59.75 1.86.89.27.14.45.2.52.32.07.12.07.65-.16 1.3z"/></svg>
+</a>
+
+<script>
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('in');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.15 });
+
+  document.querySelectorAll('.reveal').forEach((el, i) => {
+    el.style.transitionDelay = (i % 6) * 60 + 'ms';
+    observer.observe(el);
+  });
+</script>
+
+</body>
+</html>
